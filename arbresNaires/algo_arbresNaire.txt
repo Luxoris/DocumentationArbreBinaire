@@ -1,0 +1,86 @@
+ALGO :
+ 
+TYPE noeud (
+	INT valeur
+	noeud enfant
+	noeud frere
+)
+
+//initialise la racine
+PROCEDURE initRacine (VAR noeud racine, INT valeurInit)
+	racine.valeur -> valeurInit
+	racine.frere -> NULL
+	racine.enfant -> NULL
+FINPROCEDURE
+
+//ajoute un noeud
+PROCEDURE addNoeud(VAR noeud pere, INT valeur)
+	noeud newNoeud
+	//allocation mémoire
+
+	newNoeud.valeur -> valeur
+	newNoeud.frere -> NULL
+	newNoeud.enfant -> NULL
+
+	SI pere.enfant = NULL ALORS
+		pere.enfant = newNoeud
+	SINON
+		noeud grandFrere
+		//allocation mémoire
+		grandFrere -> pere.enfant
+		TANT QUE (grandFrere.frere <> NULL) FAIRE //différent de NULL
+			grandFrere -> grandFrere.frere
+		FINTANTQUE
+		grandFrere.frere -> newNoeud
+	FINSI
+FINPROCEDURE
+
+//afficher l'arbre
+PROCEDURE affichageArbre(VAR noeud *monNoeud)
+	ECRIRE(monNoeud.valeur)
+	SI (monNoeud.frere <> NULL) ALORS
+		ECRIRE(" --")
+		affichageArbre(monNoeud.frere)
+	FINSI
+	SI (monNoeud.enfant <> NULL) ALORS
+		ECRIRE("Enfant de ", monNoeud.valeur)
+		affichageArbre(monNoeud.enfant)
+	FINSI
+FINPROCEDURE
+
+//programme principale
+DEBUT
+	noeud racine
+	//allocation mémoire
+
+	noeud pere
+	//allocation mémoire
+
+	initRacine(racine, 5)
+
+	addNoeud(racine, 9)
+	addNoeud(racine, 8)
+	addNoeud(racine, 0)
+	addNoeud(racine, 15)
+	addNoeud(racine, 6)
+
+	//pere = premier enfant de racine
+    pere -> racine.enfant;
+	addNoeud(pere, 1)
+	addNoeud(pere, 5)
+	addNoeud(pere, 2)
+
+	//pere = deuxieme enfant de racine
+    pere -> racine.enfant.frere;
+	addNoeud(pere, 22)
+
+	//pere -> deuxieme enfant du premier enfant de la racine
+	pere -> racine.enfant.enfant.frere;
+	addNoeud(pere, 12)
+	addNoeud(pere, 7)
+
+	affichageArbre(racine);
+
+	//libération mémoire noeud racine
+	//libération mémoire noeud pere
+FIN
